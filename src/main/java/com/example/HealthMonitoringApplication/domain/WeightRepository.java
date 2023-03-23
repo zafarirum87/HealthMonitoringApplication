@@ -1,3 +1,4 @@
+
 package com.example.HealthMonitoringApplication.domain;
 
 import java.util.List;

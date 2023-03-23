@@ -1,3 +1,4 @@
+
 package com.example.HealthMonitoringApplication.domain;
 
 import jakarta.persistence.Entity;
@@ -7,13 +8,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-/*creating exercise entity class that store and get exercise name,  exercise hours and date for the user.
-*/
+/*creating exercise entity class that store and get exercise name, 
+ * exercise hours and date for the user.*/
+
 @Entity
 public class Exercise {
 
 	// define primary key and generate id automatically in database
+
 	@Id
+
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long exerciseId;
 	private String exerciseName;
@@ -21,27 +25,30 @@ public class Exercise {
 	private String exerciseDate;
 
 	// --- creating relationship to user table---
+
 	@ManyToOne
-	@JoinColumn(name = "userId")
-	private User user;
+
+	@JoinColumn(name = "id")
+	private AppUser user;
 
 	// constructor
-	public Exercise(String exerciseName, String exerciseHours, String exerciseDate) {
+	public Exercise(String exerciseName, String exerciseHours, String exerciseDate, AppUser user) {
 		super();
 		this.exerciseName = exerciseName;
 		this.exerciseHours = exerciseHours;
 		this.exerciseDate = exerciseDate;
+		this.user = user;
 	}
 
 	public Exercise() {
 	}
 
 	// --- getters and setters ---
-	public User getUser() {
+	public AppUser getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(AppUser user) {
 		this.user = user;
 	}
 

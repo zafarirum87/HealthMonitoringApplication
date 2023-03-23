@@ -1,3 +1,4 @@
+
 package com.example.HealthMonitoringApplication.domain;
 
 import jakarta.persistence.Entity;
@@ -8,14 +9,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 /*creating blood pressure entity class that store and get systolic value, 
- * diastolic value, and pulse rate value of the user. And also store and get time
- *  and date for blood pressure values.
-*/
+ * diastolic value, and pulse rate value of the user. 
+ * And also store and get time and date for blood pressure values.*/
 
 @Entity
 public class BloodPressure {
 
 	// define primary key and generate id automatically in database
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long bloodPressureId;
@@ -26,18 +27,20 @@ public class BloodPressure {
 	private String time;
 
 	// --- creating relationship to user table---
+
 	@ManyToOne
-	@JoinColumn(name = "userId")
-	private User user;
+	@JoinColumn(name = "id")
+	private AppUser user;
 
 	// ----- constructor-------
-	public BloodPressure(int systolic, int diastolic, int pulseRate, String date, String time) {
+	public BloodPressure(int systolic, int diastolic, int pulseRate, String date, String time, AppUser user) {
 		super();
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.pulseRate = pulseRate;
 		this.date = date;
 		this.time = time;
+		this.user = user;
 	}
 
 	public BloodPressure() {
@@ -45,11 +48,11 @@ public class BloodPressure {
 
 	// -------- getters and setters---------
 
-	public User getUser() {
+	public AppUser getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(AppUser user) {
 		this.user = user;
 	}
 
