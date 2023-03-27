@@ -3,6 +3,7 @@ package com.example.HealthMonitoringApplication.domain;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,15 +13,29 @@ import jakarta.persistence.OneToMany;
 /*creating user entity class that store and get user-id, user name, password, age and gender.
  * it also lists the blood pressure, weight and exercise record for each user.
 */
-@Entity
+@Entity(name = "users")
 public class AppUser {
 
 	// define primary key and generate id automatically in database
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", nullable = false, updatable = false)
 	private Long id;
-	private String name, password, gender;
+
+	@Column(name = "name", nullable = false, unique = true)
+	private String name;
+
+	@Column(name = "password", nullable = false)
+	private String password;
+
+	@Column(name = "gender", nullable = false)
+	private String gender;
+
+	@Column(name = "age", nullable = false)
 	private int age;
+
+	@Column(name = "role", nullable = false)
+	private String role;
 
 	// ---creating relation ---
 	// 1)--BP entity relation
@@ -32,12 +47,13 @@ public class AppUser {
 	private List<Exercise> exercise;
 
 	// constructor
-	public AppUser(String name, String password, String gender, int age) {
+	public AppUser(String name, String password, String gender, int age, String role) {
 		super();
 		this.name = name;
 		this.password = password;
 		this.gender = gender;
 		this.age = age;
+		this.role = role;
 	}
 
 	public AppUser() {
@@ -98,6 +114,14 @@ public class AppUser {
 
 	public void setExercise(List<Exercise> exercise) {
 		this.exercise = exercise;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	@Override

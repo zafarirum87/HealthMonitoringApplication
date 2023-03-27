@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
 <title>Server Programming</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-	<h1>My user List</h1>
+	<h1>
+		Hello <span th:text="${user.name}"></span>!
+	</h1>
+	<div class="col-md-4" style="padding: 20px 0">
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out" class="btn btn-sm btn-danger" />
+		</form>
+	</div>
+
 	<h2>Blood Pressure data</h2>
+	
 	<table class="table table-striped">
 		<tr>
-			<th>Name</th>
 			<th>Systolic Bp</th>
 			<th>Diastolic BP</th>
 			<th>Pulse rate</th>
@@ -17,14 +26,19 @@
 			<th>Time</th>
 		</tr>
 		<tr th:each=" userBP: ${usersBP}">
-			<td th:text="${userBP.user.name}"></td>
 			<td th:text="${userBP.systolic}"></td>
 			<td th:text="${userBP.diastolic}"></td>
 			<td th:text="${userBP.pulseRate}"></td>
 			<td th:text="${userBP.date}"></td>
 			<td th:text="${userBP.time}"></td>
+			<td><a th:href="@{/editBP/{bloodPressureId}(bloodPressureId=${userBP.bloodPressureId})}" >Edit</a></td>
 		</tr>
 	</table>
+	
+	<div class="col-md-4" style="padding: 20px 0">
+		<a href="/addNewData" class="btn btn-success">Add BP</a>
+	</div>
+	
 	<hr>
 	<h2>Exercise data</h2>
 	<table class="table table-striped">
@@ -42,7 +56,7 @@
 		</tr>
 	</table>
 	<hr>
-	<h2> Weight data</h2>
+	<h2>Weight data</h2>
 	<table class="table table-striped">
 		<tr>
 			<th>Name</th>
@@ -55,6 +69,7 @@
 			<td th:text="${userWeight.date}"></td>
 		</tr>
 	</table>
+
 
 </body>
 </html>

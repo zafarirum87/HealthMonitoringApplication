@@ -11,4 +11,8 @@ public interface ExerciseRepository extends CrudRepository<Exercise, Long> {
 
 	List<Exercise> exerciseDate(String exerciseDate);
 
+	List<Exercise> getAllByUser(AppUser user);
+
+	List<Exercise> getAllByUser(String name);
+
 }

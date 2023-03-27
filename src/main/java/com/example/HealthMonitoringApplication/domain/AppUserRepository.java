@@ -7,9 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface AppUserRepository extends CrudRepository<AppUser, Long> {
 
-	List<AppUser> findByName(String name);
+	AppUser findByName(String name);
 
 	Optional<AppUser> findById(Long id);
 
 	List<AppUser> findById(int i);
+
+	AppUser getUserByName(String name);
 }

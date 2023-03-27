@@ -9,4 +9,9 @@ public interface BloodPressureRepository extends CrudRepository<BloodPressure, L
 	List<BloodPressure> findByDate(String date);
 
 	List<BloodPressure> findByTime(String time);
+
+	List<BloodPressure> getAllByUser(AppUser user);
+
+	List<BloodPressure> getAllByUser(String name);
+
 }
