@@ -31,6 +31,7 @@
 			<td th:text="${userBP.pulseRate}"></td>
 			<td th:text="${userBP.date}"></td>
 			<td th:text="${userBP.time}"></td>
+			<td><a th:href="@{/delete/{bloodPressureId}(bloodPressureId=${userBP.bloodPressureId})}" class="btn btn-danger">Delete</a></td>
 			<td><a th:href="@{/editBP/{bloodPressureId}(bloodPressureId=${userBP.bloodPressureId})}" >Edit</a></td>
 		</tr>
 	</table>

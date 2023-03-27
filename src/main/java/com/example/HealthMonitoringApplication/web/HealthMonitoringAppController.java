@@ -84,7 +84,7 @@ public class HealthMonitoringAppController {
 		return "redirect:userList";
 	}
 
-	// edit BP data
+	// 4) edit BP data
 
 	@RequestMapping(value = "/editBP/{bloodPressureId}", method = RequestMethod.GET)
 	public String edit(@PathVariable("bloodPressureId") Long bloodPressureId, Model model) {
@@ -106,11 +106,11 @@ public class HealthMonitoringAppController {
 
 	}
 
-	// delete BP data
+	// 5) delete BP data
 	@RequestMapping(value = "/delete/{bloodPressureId}", method = RequestMethod.GET)
 	public String deleteBook(@PathVariable("bloodPressureId") Long bloodPressureId, Model model) {
 		bpRepository.deleteById(bloodPressureId);
-		return "redirect:../bookList";
+		return "redirect:../userList";
 	}
 
 }
