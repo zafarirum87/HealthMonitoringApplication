@@ -16,7 +16,7 @@
 	</div>
 
 	<h2>Blood Pressure data</h2>
-	
+
 	<table class="table table-striped">
 		<tr>
 			<th>Systolic Bp</th>
@@ -31,46 +31,61 @@
 			<td th:text="${userBP.pulseRate}"></td>
 			<td th:text="${userBP.date}"></td>
 			<td th:text="${userBP.time}"></td>
-			<td><a th:href="@{/delete/{bloodPressureId}(bloodPressureId=${userBP.bloodPressureId})}" class="btn btn-danger">Delete</a></td>
-			<td><a th:href="@{/editBP/{bloodPressureId}(bloodPressureId=${userBP.bloodPressureId})}" >Edit</a></td>
+			<td><a
+				th:href="@{/delete/{bloodPressureId}(bloodPressureId=${userBP.bloodPressureId})}"
+				class="btn btn-danger">Delete</a></td>
+			<td><a
+				th:href="@{/editBP/{bloodPressureId}(bloodPressureId=${userBP.bloodPressureId})}">Edit</a></td>
 		</tr>
 	</table>
-	
+
 	<div class="col-md-4" style="padding: 20px 0">
-		<a href="/addNewData" class="btn btn-success">Add BP</a>
+		<a href="/addNewBP" class="btn btn-success">Add BP</a>
 	</div>
-	
+
 	<hr>
 	<h2>Exercise data</h2>
 	<table class="table table-striped">
 		<tr>
-			<th>Name</th>
-			<th>Exercise</th>
-			<th>Hours</th>
+			<th>Exercise Name</th>
+			<th>Exercise Hours</th>
 			<th>Date</th>
 		</tr>
 		<tr th:each=" userEx: ${usersExercise}">
-			<td th:text="${userEx.user.name}"></td>
 			<td th:text="${userEx.exerciseName}"></td>
 			<td th:text="${userEx.exerciseHours}"></td>
 			<td th:text="${userEx.exerciseDate}"></td>
+			<td><a
+				th:href="@{/editExercise/{exerciseId}(exerciseId=${userEx.exerciseId})}">Edit</a></td>
+				<td><a
+				th:href="@{/deleteEx/{exerciseId}(exerciseId=${userEx.exerciseId})}"
+				class="btn btn-danger">Delete</a></td>
 		</tr>
 	</table>
+	<div class="col-md-4" style="padding: 20px 0">
+		<a href="/addExerciseData" class="btn btn-success">Add Exercise</a>
+	</div>
+	
 	<hr>
 	<h2>Weight data</h2>
 	<table class="table table-striped">
 		<tr>
-			<th>Name</th>
 			<th>Weight</th>
 			<th>Date</th>
 		</tr>
 		<tr th:each=" userWeight: ${usersweight}">
-			<td th:text="${userWeight.user.name}"></td>
 			<td th:text="${userWeight.weight}"></td>
 			<td th:text="${userWeight.date}"></td>
+			<td><a
+				th:href="@{/editWeight/{weightId}(weightId=${userWeight.weightId})}">Edit</a></td>
+				<td><a
+				th:href="@{/deleteWeight/{weightId}(weightId=${userWeight.weightId})}"
+				class="btn btn-danger">Delete</a></td>
 		</tr>
 	</table>
-
+	<div class="col-md-4" style="padding: 20px 0">
+		<a href="/addWeight" class="btn btn-success">Add Exercise</a>
+	</div>
 
 </body>
 </html>

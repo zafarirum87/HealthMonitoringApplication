@@ -66,10 +66,10 @@ public class HealthMonitoringAppController {
 
 	// 3) Add users new BP data
 
-	@RequestMapping("/addNewData")
+	@RequestMapping("/addNewBP")
 	public String save(Model model) {
 		model.addAttribute("bloodPressure", new BloodPressure());
-		return "addNewData";
+		return "addNewBP";
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -108,9 +108,106 @@ public class HealthMonitoringAppController {
 
 	// 5) delete BP data
 	@RequestMapping(value = "/delete/{bloodPressureId}", method = RequestMethod.GET)
-	public String deleteBook(@PathVariable("bloodPressureId") Long bloodPressureId, Model model) {
+	public String deleteBP(@PathVariable("bloodPressureId") Long bloodPressureId, Model model) {
 		bpRepository.deleteById(bloodPressureId);
 		return "redirect:../userList";
 	}
 
+	// 6) Add users new exercise data
+
+	@RequestMapping("/addExerciseData")
+	public String saveExercise(Model model) {
+		model.addAttribute("exercise", new Exercise());
+		return "addExerciseData";
+	}
+
+	@RequestMapping(value = "/saveExercise", method = RequestMethod.POST)
+	public String saveExercise(@AuthenticationPrincipal UserDetails userDetails, Exercise exercise) {
+
+		String name = userDetails.getUsername();
+		AppUser user = userRepository.getUserByName(name);
+
+		exercise.setUser(user);
+
+		exRepository.save(exercise);
+		return "redirect:userList";
+	}
+
+	// 7) edit exercise data
+
+	@RequestMapping(value = "/editExercise/{exerciseId}", method = RequestMethod.GET)
+	public String editExercise(@PathVariable("exerciseId") Long exerciseId, Model model) {
+		model.addAttribute("exercise", exRepository.findById(exerciseId));
+		return "editExercise";
+	}
+
+	@RequestMapping(value = "/editExercise/{exerciseId}", method = RequestMethod.POST)
+	public String saveEditExercise(@PathVariable("exerciseId") Long exerciseId,
+			@AuthenticationPrincipal UserDetails userDetails, Exercise exercise) {
+
+		String name = userDetails.getUsername();
+		AppUser user = userRepository.getUserByName(name);
+		exercise.setUser(user);
+
+		exercise.setExerciseId(exerciseId);
+		exRepository.save(exercise);
+		return "redirect:../userList";
+
+	}
+
+	// 8) delete exercise data
+	@RequestMapping(value = "/deleteEx/{exerciseId}", method = RequestMethod.GET)
+	public String deleteExercise(@PathVariable("exerciseId") Long exerciseId, Model model) {
+		exRepository.deleteById(exerciseId);
+		return "redirect:../userList";
+	}
+
+	// 9) Add users new Weight data
+
+	@RequestMapping("/addWeight")
+	public String saveWeight(Model model) {
+		model.addAttribute("weight", new Weight());
+		return "addWeight";
+	}
+
+	@RequestMapping(value = "/saveWeight", method = RequestMethod.POST)
+	public String saveWeight(@AuthenticationPrincipal UserDetails userDetails, Weight weight) {
+
+		String name = userDetails.getUsername();
+		AppUser user = userRepository.getUserByName(name);
+
+		weight.setUser(user);
+
+		weightRepository.save(weight);
+		return "redirect:userList";
+	}
+
+	// 10) edit weight data
+
+	@RequestMapping(value = "/editWeight/{weightId}", method = RequestMethod.GET)
+	public String editWeight(@PathVariable("weightId") Long weightId, Model model) {
+		model.addAttribute("weight", weightRepository.findById(weightId));
+		return "editWeight";
+	}
+
+	@RequestMapping(value = "/editWeight/{weightId}", method = RequestMethod.POST)
+	public String saveEditWeight(@PathVariable("weightId") Long weightId,
+			@AuthenticationPrincipal UserDetails userDetails, Weight weight) {
+
+		String name = userDetails.getUsername();
+		AppUser user = userRepository.getUserByName(name);
+		weight.setUser(user);
+
+		weight.setWeightId(weightId);
+		weightRepository.save(weight);
+		return "redirect:../userList";
+
+	}
+
+	// 8) delete weight data
+	@RequestMapping(value = "/deleteWeight/{weightId}", method = RequestMethod.GET)
+	public String deleteWeight(@PathVariable("weightId") Long weightId, Model model) {
+		weightRepository.deleteById(weightId);
+		return "redirect:../userList";
+	}
 }

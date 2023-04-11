@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+<title>Server Programming</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Add Exercise</h1>
+	
+	<div>
+		<form action="#" th:action="@{saveExercise}" th:object="${exercise}"  method="post">
+		
+			<label for="exerciseName">Exercise Name</label> 
+			<input type="text" id="exerciseName" th:field="*{exerciseName}" /> <br> 
+			
+			<div style="clear: both; display: block; height: 10px;"></div>
+			
+			<label for="exerciseHours">Hours</label>
+			<input type="text" id="exerciseHours" th:field="*{exerciseHours}" /> <br> 
+			
+			<div style="clear: both; display: block; height: 10px;"></div>
+			
+			<label for="exerciseDate">Date</label> 
+			<input type="text" id="exerciseDate" th:field="*{exerciseDate}" /> <br>
+			
+			<div style="clear: both; display: block; height: 10px;"></div>
+			
+            <input type="submit" value="Save" />
+		</form>
+	</div>
+</body>
+</html>
