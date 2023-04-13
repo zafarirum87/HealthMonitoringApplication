@@ -7,7 +7,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -33,6 +36,24 @@ public class HealthMonitoringAppController {
 	@Autowired
 	private BloodPressureRepository bpRepository;
 
+	// create new user account using sign up form
+	@GetMapping("/signUp")
+	public String showSignInForm(Model model) {
+		model.addAttribute("user", new AppUser());
+		return "signUp";
+	}
+
+	@PostMapping("/signUp")
+	public String processSignInForm(@ModelAttribute("user") AppUser user) {
+		AppUser existingUser = userRepository.findByName(user.getName());
+		if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
+			return "redirect:/signUp?error";
+		} else {
+			userRepository.save(user);
+			return "redirect:/userList";
+		}
+	}
+
 	// 1) Login method
 	@RequestMapping(value = "/login")
 	public String login() {
@@ -44,7 +65,7 @@ public class HealthMonitoringAppController {
 		return "login";
 	}
 
-	// 2) list users data
+	// 2) list users bp data
 	@RequestMapping(value = "/userList")
 	public String userList(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 		String name = userDetails.getUsername();
@@ -210,4 +231,26 @@ public class HealthMonitoringAppController {
 		weightRepository.deleteById(weightId);
 		return "redirect:../userList";
 	}
+
+//	// ******------------RESTFUL API-----------***********
+//	// 1) list users bp data
+//	@RequestMapping(value = "/userData")
+//	public @ResponseBody List<AppUser> userListRest(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+//		String name = userDetails.getUsername();
+//		AppUser user = userRepository.getUserByName(name);
+//
+//		List<BloodPressure> bloodPressures = bpRepository.getAllByUser(user);
+//
+//		List<Exercise> exercises = exRepository.getAllByUser(user);
+//
+//		List<Weight> weight = weightRepository.getAllByUser(user);
+//
+//		model.addAttribute("user", user);
+//		model.addAttribute("usersBP", bloodPressures);
+//		model.addAttribute("usersExercise", exercises);
+//		model.addAttribute("usersweight", weight);
+//
+//		return (List<AppUser>) userRepository.findAll();
+//	}
+
 }

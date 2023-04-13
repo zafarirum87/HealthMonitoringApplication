@@ -8,7 +8,9 @@
 </head>
 <body>
 	<div class="col-md-4 col-md-offset-4">
+	
 		<div class="alert alert-danger" th:if="${param.error}">Invalid User Name and password.</div>
+		
 		<form th:action="@{/login}" method="post">
 			<div>
 				<label> User Name : <input type="text" name="username" class="form-control"/>
@@ -19,9 +21,13 @@
 				</label>
 			</div>
 			<div>
-				<input type="submit" value="Sign In" class="btn btn-primary" />
+				<input type="submit" value="Login" class="btn btn-primary" />
 			</div>
 		</form>
+		
+		<div>
+        Don't have an account? <a href="/signUp">Sign up</a>
+    </div>
 	</div>
 </body>
 </html>

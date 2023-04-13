@@ -2,6 +2,8 @@ package com.example.HealthMonitoringApplication.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,12 +41,19 @@ public class AppUser {
 
 	// ---creating relation ---
 	// 1)--BP entity relation
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<BloodPressure> bloodPressure;
 
 	// 2) exercise entity relation
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<Exercise> exercise;
+
+	// 2) weight entity relation
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<Weight> weight;
 
 	// constructor
 	public AppUser(String name, String password, String gender, int age, String role) {
@@ -100,6 +109,14 @@ public class AppUser {
 		this.age = age;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	public List<BloodPressure> getBloodPressure() {
 		return bloodPressure;
 	}
@@ -116,12 +133,12 @@ public class AppUser {
 		this.exercise = exercise;
 	}
 
-	public String getRole() {
-		return role;
+	public List<Weight> getWeight() {
+		return weight;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setWeight(List<Weight> weight) {
+		this.weight = weight;
 	}
 
 	@Override
