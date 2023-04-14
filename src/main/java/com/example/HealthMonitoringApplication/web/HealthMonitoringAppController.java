@@ -5,12 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -36,25 +35,31 @@ public class HealthMonitoringAppController {
 	@Autowired
 	private BloodPressureRepository bpRepository;
 
-	// create new user account using sign up form
-	@GetMapping("/signUp")
-	public String showSignInForm(Model model) {
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+
+	// 1) create signUp form
+	@RequestMapping(value = "/signUp")
+	public String signUp(Model model) {
 		model.addAttribute("user", new AppUser());
-		return "signUp";
+		return "/signUp";
 	}
 
-	@PostMapping("/signUp")
-	public String processSignInForm(@ModelAttribute("user") AppUser user) {
+	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
+	public String submitSignUp(@ModelAttribute("user") AppUser user) {
 		AppUser existingUser = userRepository.findByName(user.getName());
 		if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
 			return "redirect:/signUp?error";
 		} else {
+			user.setRole("user");
+			String encodedPassword = passwordEncoder.encode(user.getPassword());
+			user.setPassword(encodedPassword);
 			userRepository.save(user);
-			return "redirect:/userList";
+			return "redirect:/login";
 		}
 	}
 
-	// 1) Login method
+	// 1.1) Login method
 	@RequestMapping(value = "/login")
 	public String login() {
 		return "login";
