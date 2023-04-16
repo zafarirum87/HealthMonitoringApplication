@@ -1,11 +1,12 @@
 package com.example.HealthMonitoringApplication.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,35 +34,41 @@ public class RestApiController {
 	@Autowired
 	private BloodPressureRepository bpRepository;
 
-	// 1) Rest Login method
-	@RequestMapping(value = "/login")
-	public List<AppUser> login() {
-		return (List<AppUser>) userRepository.findAll();
+	public class UserDTO {
+		private Long id;
+		private String username;
+		private int age;
+		private String gender;
 	}
 
-	@RequestMapping(value = "/logout")
-	public List<AppUser> logout() {
-		return (List<AppUser>) userRepository.findAll();
+	// get by userName
+	@GetMapping("/{username}")
+	public ResponseEntity<List<Object>> getUserByUsername(@PathVariable String username) {
+		AppUser currUser = userRepository.findByName(username);
+		List<BloodPressure> bloodPressures = bpRepository.getAllByUser(currUser);
+		List<Exercise> exercises = exRepository.getAllByUser(currUser);
+		List<Weight> weight = weightRepository.getAllByUser(currUser);
+		List<Object> response = new ArrayList<>();
+		response.add(currUser);
+		response.add(bloodPressures);
+		response.add(exercises);
+		response.add(weight);
+		return (ResponseEntity.ok(response));
 	}
 
-	// 2) list users bp Rest data
-	@RequestMapping(value = "/userData")
-	public List<AppUser> userListRest(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-		String name = userDetails.getUsername();
-		AppUser user = userRepository.getUserByName(name);
+	// list users
+	@GetMapping("/userslist")
+	public ResponseEntity<List<Object>> getUsersWithRelatedData() {
+		List<AppUser> users = (List<AppUser>) userRepository.findAll();
 
-		List<BloodPressure> bloodPressures = bpRepository.getAllByUser(user);
-
-		List<Exercise> exercises = exRepository.getAllByUser(user);
-
-		List<Weight> weight = weightRepository.getAllByUser(user);
-
-		model.addAttribute("user", user);
-		model.addAttribute("usersBP", bloodPressures);
-		model.addAttribute("usersExercise", exercises);
-		model.addAttribute("usersweight", weight);
-
-		return (List<AppUser>) userRepository.findAll();
+		List<Object> response = new ArrayList<>();
+		for (AppUser user : users) {
+			List<Object> userData = new ArrayList<>();
+			userData.add(user.getName());
+			userData.add(user.getAge());
+			userData.add(user.getGender());
+			response.add(userData);
+		}
+		return ResponseEntity.ok(response);
 	}
-
 }
