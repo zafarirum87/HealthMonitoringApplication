@@ -1,16 +1,19 @@
 
 package com.example.HealthMonitoringApplication.domain;
 
+import org.springframework.validation.annotation.Validated;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 
-/*creating exercise entity class that store and get exercise name, 
+/*creating exercise entity class that store and get exercise name,
  * exercise hours and date for the user.*/
-
+@Validated
 @Entity
 public class Exercise {
 
@@ -20,8 +23,14 @@ public class Exercise {
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long exerciseId;
+
+	@NotBlank
 	private String exerciseName;
+
+	@NotBlank
 	private String exerciseHours;
+
+	@NotBlank
 	private String exerciseDate;
 
 	// --- creating relationship to user table---

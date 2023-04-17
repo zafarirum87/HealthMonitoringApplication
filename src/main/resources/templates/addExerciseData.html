@@ -9,25 +9,28 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 </head>
 <body>
 	<h1>Add Exercise</h1>
-	
+
 	<div>
 		<form action="#" th:action="@{saveExercise}" th:object="${exercise}"  method="post">
-		
-			<label for="exerciseName">Exercise Name</label> 
-			<input type="text" id="exerciseName" th:field="*{exerciseName}" /> <br> 
-			
+
+			<label for="exerciseName">Exercise Name</label>
+			<input type="text" id="exerciseName" th:field="*{exerciseName}" />
+			<span th:if="${#fields.hasErrors('exerciseName')}" th:errors="*{exerciseName}"></span> <br>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
-			
+
 			<label for="exerciseHours">Hours</label>
-			<input type="text" id="exerciseHours" th:field="*{exerciseHours}" /> <br> 
-			
+			<input type="text" id="exerciseHours" th:field="*{exerciseHours}" />
+			<span th:if="${#fields.hasErrors('exerciseHours')}" th:errors="*{exerciseHours}"></span> <br>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
-			
-			<label for="exerciseDate">Date</label> 
-			<input type="text" id="exerciseDate" th:field="*{exerciseDate}" /> <br>
-			
+
+			<label for="exerciseDate">Date</label>
+			<input type="text" id="exerciseDate" th:field="*{exerciseDate}" />
+			<span th:if="${#fields.hasErrors('exerciseDate')}" th:errors="*{exerciseDate}"></span> <br>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
-			
+
             <input type="submit" value="Save" class="btn btn-success"/>
 		</form>
 	</div>

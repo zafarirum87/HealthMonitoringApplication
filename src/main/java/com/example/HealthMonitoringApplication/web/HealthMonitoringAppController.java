@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,8 @@ import com.example.HealthMonitoringApplication.domain.Exercise;
 import com.example.HealthMonitoringApplication.domain.ExerciseRepository;
 import com.example.HealthMonitoringApplication.domain.Weight;
 import com.example.HealthMonitoringApplication.domain.WeightRepository;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class HealthMonitoringAppController {
@@ -87,7 +90,7 @@ public class HealthMonitoringAppController {
 		model.addAttribute("usersExercise", exercises);
 		model.addAttribute("usersweight", weight);
 
-		return "userList";
+		return "/userList";
 	}
 
 	// 3) Add users new BP data
@@ -99,14 +102,17 @@ public class HealthMonitoringAppController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(@AuthenticationPrincipal UserDetails userDetails, BloodPressure bloodPressure) {
-
+	public String save(@AuthenticationPrincipal UserDetails userDetails, @Valid BloodPressure bloodPressure,
+			BindingResult result) {
+		if (result.hasErrors()) {
+			return "addNewBP";
+		}
 		String name = userDetails.getUsername();
 		AppUser user = userRepository.getUserByName(name);
 
 		bloodPressure.setUser(user);
-
 		bpRepository.save(bloodPressure);
+
 		return "redirect:userList";
 	}
 
@@ -120,16 +126,20 @@ public class HealthMonitoringAppController {
 
 	@RequestMapping(value = "/editBP/{bloodPressureId}", method = RequestMethod.POST)
 	public String saveEdit(@PathVariable("bloodPressureId") Long bloodPressureId,
-			@AuthenticationPrincipal UserDetails userDetails, BloodPressure bp) {
+			@AuthenticationPrincipal UserDetails userDetails, @Valid @ModelAttribute("bp") BloodPressure bp,
+			BindingResult result) {
 
 		String name = userDetails.getUsername();
 		AppUser user = userRepository.getUserByName(name);
-		bp.setUser(user);
 
+		if (result.hasErrors()) {
+			return "editBP";
+		}
+		bp.setUser(user);
 		bp.setBloodPressureId(bloodPressureId);
 		bpRepository.save(bp);
-		return "redirect:../userList";
 
+		return "redirect:../userList";
 	}
 
 	// 5) delete BP data
@@ -148,13 +158,16 @@ public class HealthMonitoringAppController {
 	}
 
 	@RequestMapping(value = "/saveExercise", method = RequestMethod.POST)
-	public String saveExercise(@AuthenticationPrincipal UserDetails userDetails, Exercise exercise) {
+	public String saveExercise(@AuthenticationPrincipal UserDetails userDetails,
+			@Valid @ModelAttribute("exercise") Exercise exercise, BindingResult result) {
 
+		if (result.hasErrors()) {
+			return "addExerciseData";
+		}
 		String name = userDetails.getUsername();
 		AppUser user = userRepository.getUserByName(name);
 
 		exercise.setUser(user);
-
 		exRepository.save(exercise);
 		return "redirect:userList";
 	}
@@ -169,12 +182,16 @@ public class HealthMonitoringAppController {
 
 	@RequestMapping(value = "/editExercise/{exerciseId}", method = RequestMethod.POST)
 	public String saveEditExercise(@PathVariable("exerciseId") Long exerciseId,
-			@AuthenticationPrincipal UserDetails userDetails, Exercise exercise) {
-
+			@AuthenticationPrincipal UserDetails userDetails, @Valid @ModelAttribute("exercise") Exercise exercise,
+			BindingResult result) {
 		String name = userDetails.getUsername();
 		AppUser user = userRepository.getUserByName(name);
-		exercise.setUser(user);
 
+		if (result.hasErrors()) {
+			return "editExercise";
+		}
+
+		exercise.setUser(user);
 		exercise.setExerciseId(exerciseId);
 		exRepository.save(exercise);
 		return "redirect:../userList";
@@ -192,19 +209,24 @@ public class HealthMonitoringAppController {
 
 	@RequestMapping("/addWeight")
 	public String saveWeight(Model model) {
-		model.addAttribute("weight", new Weight());
+		model.addAttribute("userWeight", new Weight());
 		return "addWeight";
 	}
 
 	@RequestMapping(value = "/saveWeight", method = RequestMethod.POST)
-	public String saveWeight(@AuthenticationPrincipal UserDetails userDetails, Weight weight) {
+	public String saveWeight(@AuthenticationPrincipal UserDetails userDetails,
+			@Valid @ModelAttribute("userWeight") Weight userWeight, BindingResult result) {
+
+		if (result.hasErrors()) {
+			return "addWeight";
+		}
 
 		String name = userDetails.getUsername();
 		AppUser user = userRepository.getUserByName(name);
 
-		weight.setUser(user);
+		userWeight.setUser(user);
 
-		weightRepository.save(weight);
+		weightRepository.save(userWeight);
 		return "redirect:userList";
 	}
 
@@ -212,20 +234,24 @@ public class HealthMonitoringAppController {
 
 	@RequestMapping(value = "/editWeight/{weightId}", method = RequestMethod.GET)
 	public String editWeight(@PathVariable("weightId") Long weightId, Model model) {
-		model.addAttribute("weight", weightRepository.findById(weightId));
+		model.addAttribute("userWeight", weightRepository.findById(weightId));
 		return "editWeight";
 	}
 
 	@RequestMapping(value = "/editWeight/{weightId}", method = RequestMethod.POST)
 	public String saveEditWeight(@PathVariable("weightId") Long weightId,
-			@AuthenticationPrincipal UserDetails userDetails, Weight weight) {
+			@AuthenticationPrincipal UserDetails userDetails, @Valid @ModelAttribute("userWeight") Weight userWeight,
+			BindingResult result) {
 
 		String name = userDetails.getUsername();
 		AppUser user = userRepository.getUserByName(name);
-		weight.setUser(user);
 
-		weight.setWeightId(weightId);
-		weightRepository.save(weight);
+		if (result.hasErrors()) {
+			return "editWeight";
+		}
+		userWeight.setUser(user);
+		userWeight.setWeightId(weightId);
+		weightRepository.save(userWeight);
 		return "redirect:../userList";
 
 	}
@@ -236,26 +262,5 @@ public class HealthMonitoringAppController {
 		weightRepository.deleteById(weightId);
 		return "redirect:../userList";
 	}
-
-//	// ******------------RESTFUL API-----------***********
-//	// 1) list users bp data
-//	@RequestMapping(value = "/userData")
-//	public @ResponseBody List<AppUser> userListRest(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-//		String name = userDetails.getUsername();
-//		AppUser user = userRepository.getUserByName(name);
-//
-//		List<BloodPressure> bloodPressures = bpRepository.getAllByUser(user);
-//
-//		List<Exercise> exercises = exRepository.getAllByUser(user);
-//
-//		List<Weight> weight = weightRepository.getAllByUser(user);
-//
-//		model.addAttribute("user", user);
-//		model.addAttribute("usersBP", bloodPressures);
-//		model.addAttribute("usersExercise", exercises);
-//		model.addAttribute("usersweight", weight);
-//
-//		return (List<AppUser>) userRepository.findAll();
-//	}
 
 }

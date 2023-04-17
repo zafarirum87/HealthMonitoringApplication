@@ -19,6 +19,7 @@ import com.example.HealthMonitoringApplication.domain.ExerciseRepository;
 import com.example.HealthMonitoringApplication.domain.Weight;
 import com.example.HealthMonitoringApplication.domain.WeightRepository;
 
+//// ******------------RESTFUL API-----------***********
 @RestController
 @RequestMapping("/api")
 public class RestApiController {
@@ -33,13 +34,6 @@ public class RestApiController {
 
 	@Autowired
 	private BloodPressureRepository bpRepository;
-
-	public class UserDTO {
-		private Long id;
-		private String username;
-		private int age;
-		private String gender;
-	}
 
 	// get by userName
 	@GetMapping("/{username}")

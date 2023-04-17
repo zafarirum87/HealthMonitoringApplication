@@ -1,17 +1,22 @@
 
 package com.example.HealthMonitoringApplication.domain;
 
+import org.springframework.validation.annotation.Validated;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-/*creating blood pressure entity class that store and get systolic value, 
- * diastolic value, and pulse rate value of the user. 
+/*creating blood pressure entity class that store and get systolic value,
+ * diastolic value, and pulse rate value of the user.
  * And also store and get time and date for blood pressure values.*/
-
+@Validated
 @Entity
 public class BloodPressure {
 
@@ -20,10 +25,23 @@ public class BloodPressure {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long bloodPressureId;
+
+	@NotNull(message = "cannot be empty")
+	@Min(value = 0)
 	private int systolic;
+
+	@NotNull
+	@Min(value = 0)
 	private int diastolic;
+
+	@NotNull
+	@Min(value = 0)
 	private int pulseRate;
+
+	@NotBlank
 	private String date;
+
+	@NotBlank
 	private String time;
 
 	// --- creating relationship to user table---

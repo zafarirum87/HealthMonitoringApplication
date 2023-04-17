@@ -8,21 +8,23 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 	th:href="@{/css/bootstrap.min.css}" />
 </head>
 <body>
-	<h1>Edit Exercise</h1>
-	
+	<h1>Edit Weight</h1>
+
 	<div>
-		<form action="#" th:action="@{${weightId}}" th:object="${weight}"  method="post">
-		
-			<label for="weight">Weight</label> 
-			<input type="number" id="weight" th:field="*{weight}" /> <br> 
-			
+		<form action="#" th:action="@{${weightId}}" th:object="${userWeight}"  method="post">
+
+			<label for="weight">Weight</label>
+			<input type="number" id="weight" th:field="*{weight}" />
+			<span th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"></span> <br>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
-			
+
 			<label for="date">Date</label>
-			<input type="text" id="date" th:field="*{date}" /> <br> 
-			
+			<input type="text" id="date" th:field="*{date}" />
+			<span th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span> <br>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
-				
+
             <input type="submit" value="Save" class="btn btn-success"/>
 		</form>
 	</div>

@@ -1,26 +1,35 @@
 
 package com.example.HealthMonitoringApplication.domain;
 
+import org.springframework.validation.annotation.Validated;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /* creating weight entity class that store and get weight value and date of the
  user.*/
-
+@Validated
 @Entity
 public class Weight {
 
 	// define primary key and generate id automatically in database
 
 	@Id
-
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long weightId;
+
+	@NotNull(message = "cannot be empty")
+	@Min(value = 0)
 	private double weight;
+
+	@NotBlank(message = "cannot be empty")
 	private String date;
 
 	// --- creating relationship to user table---

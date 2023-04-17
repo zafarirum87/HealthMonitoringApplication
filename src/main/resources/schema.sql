@@ -11,14 +11,14 @@ CREATE Table If Not EXITS Weight(
 weightId Long (5) NOT NULL AUTO-INCREMENT,
 weight double(5) default NULL,
 date varchar(50) DEFAULT NULL,
-PRIMARY KEY(bloodPressureId)
+PRIMARY KEY(weightId)
 );
 CREATE Table If Not EXITS Exercise(
 exerciseId Long (5) NOT NULL AUTO-INCREMENT,
 exerciseName varchar(50) DEFAULT NULL,
 exerciseHours varchar(50) DEFAULT NULL,
 exerciseDate varchar(50) DEFAULT NULL,
-PRIMARY KEY(bloodPressureId)
+PRIMARY KEY(exerciseId)
 );
 CREATE Table If Not EXITS AppUser(
 id Long (5) NOT NULL AUTO-INCREMENT,

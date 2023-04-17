@@ -9,35 +9,40 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 </head>
 <body>
 	<h1>Add BP</h1>
-	
+
 	<div>
 		<form action="#" th:action="@{save}" th:object="${bloodPressure}"  method="post">
-		
-			<label for="systolic">Systolic</label> 
-			<input type="number" id="systolic" th:field="*{systolic}" /> <br> 
-			
+
+			<label for="systolic">Systolic</label>
+			<input type="number" id="systolic" th:field="*{systolic}"/>
+			<span th:if="${#fields.hasErrors('systolic')}" th:errors="*{systolic}"></span> <br>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
-			
+
 			<label for="diastolic">Diastolic</label>
-			<input type="number" id="diastolic" th:field="*{diastolic}" /> <br> 
-			
+			<input type="number" id="diastolic" th:field="*{diastolic}" />
+			<span th:if="${#fields.hasErrors('diastolic')}" th:errors="*{diastolic}"></span><br>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
-			
-			<label for="pulseRate">Pulse Rate</label> 
-			<input type="text" id="pulseRate" th:field="*{pulseRate}" /> <br>
-			
+
+			<label for="pulseRate">Pulse Rate</label>
+			<input type="number" id="pulseRate" th:field="*{pulseRate}" />
+			<span th:if="${#fields.hasErrors('pulseRate')}" th:errors="*{pulseRate}"></span> <br>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
-			
-			<label for="date">Date</label> 
-			<input type="text" id="date" th:field="*{date}" />  <br>
-			
+
+			<label for="date">Date</label>
+			<input type="text" id="date" th:field="*{date}" />
+			<span th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span> <br>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
-			
+
 			<label for="time">Time</label>
-			<input type="text" id="time" th:field="*{time}" /> <br>
-			
-			<div style="clear: both; display: block; height: 10px;"></div>	
-            
+			<input type="text" id="time" th:field="*{time}"/>
+			<span th:if="${#fields.hasErrors('time')}" th:errors="*{time}"></span> <br>
+
+			<div style="clear: both; display: block; height: 10px;"></div>
+
             <input type="submit" value="Save" class="btn btn-success"/>
 		</form>
 	</div>
