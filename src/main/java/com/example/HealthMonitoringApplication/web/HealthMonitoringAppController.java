@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.HealthMonitoringApplication.domain.AppUser;
 import com.example.HealthMonitoringApplication.domain.AppUserRepository;
@@ -45,21 +46,23 @@ public class HealthMonitoringAppController {
 	@RequestMapping(value = "/signUp")
 	public String signUp(Model model) {
 		model.addAttribute("user", new AppUser());
-		return "/signUp";
+		return "signUp";
 	}
 
 	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
-	public String submitSignUp(@ModelAttribute("user") AppUser user) {
+	public String submitSignUp(@ModelAttribute("user") AppUser user, RedirectAttributes redirAttrs) {
 		AppUser existingUser = userRepository.findByName(user.getName());
 		if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
-			return "redirect:/signUp?error";
-		} else {
-			user.setRole("user");
-			String encodedPassword = passwordEncoder.encode(user.getPassword());
-			user.setPassword(encodedPassword);
-			userRepository.save(user);
-			return "redirect:/login";
+			redirAttrs.addFlashAttribute("error", "The user already exists.");
+			return "redirect:signUp";
 		}
+		user.setRole("user");
+		String encodedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
+		userRepository.save(user);
+		redirAttrs.addFlashAttribute("success", "Sign-Up successfully.");
+		return "redirect:login";
+
 	}
 
 	// 1.1) Login method
@@ -90,7 +93,7 @@ public class HealthMonitoringAppController {
 		model.addAttribute("usersExercise", exercises);
 		model.addAttribute("usersweight", weight);
 
-		return "/userList";
+		return "userList";
 	}
 
 	// 3) Add users new BP data
